@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta Name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Registration Form</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+        background-image:url("https://livewire.laravel.com/images/bg_paywall.png");
+       background-repeat: no-repeat;
+       background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      color: #fff; 
+    }
+    .error {
+      color: red;
+    }
+    input[type="text"],
+    input[type="Email"],
+    input[type="tel"],
+    select {
+      width: 100%;
+      max-width: 500px;
+    }
+    @keyframes move {
+      0% {
+        transform: translateY(0);
+        color: fff;
+      }
+      50% {
+        transform: translateY(-10px);
+        color: #ff00ff; 
+      }
+      100% {
+        transform: translateY(0);
+        color: cyan;
+      }
+    }
+
+    h1 {
+      animation: move 3s infinite;
+    }
+
+    #qrcode {
+      margin-top: 20px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <h1><i><center>EPOC....</center></i></h1>
+    <form id="registrationForm">
+      <div class="form-group">
+        <label for="Name">Name:</label>
+        <input type="text" class="form-control" id="Name" Name="Name" placeholder="Enter your name" required>
+        <span id="NameError" class="error" style="display: none;"></span>
+      </div>
+      <div class="form-group">
+        <label for="Email">Email:</label>
+        <input type="Email" class="form-control" id="Email" Name="Email" placeholder="Enter your Email" required disabled>
+        <span id="EmailError" class="error" style="display: none;"></span>
+      </div>
+      <div class="form-group">
+        <label for="Phone">Phone:</label>
+        <input type="tel" class="form-control" id="Phone" Name="Phone" pattern="[0-9]{10}" placeholder="Enter Phone number" required disabled>
+        <span id="PhoneError" class="error" style="display: none;"></span>
+      </div>
+      <div class="form-group">
+        <label for="College">College/University:</label>
+        <input type="text" class="form-control" id="College" Name="College" placeholder="Enter college" required disabled>
+        <span id="CollegeError" class="error" style="display: none;"></span>
+      </div>
+      <div class="form-group">
+        <label for="Year">Year of Study:</label>
+        <select class="form-control" id="Year" Name="Year" required disabled>
+          <option value="">Select Year</option>
+          <option value="1">First Year</option>
+          <option value="2">Second Year</option>
+          <option value="3">Third Year</option>
+          <option value="4">Fourth Year</option>
+          <option value="5+">Fifth Year or Higher</option>
+        </select>
+        <span id="YearError" class="error" style="display: none;"></span>
+      </div>
+      <div class="form-group">
+        <label>Gender:</label><br>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" Name="Gender" id="male" value="male" required disabled>
+          <label class="form-check-label" for="male">Male</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" Name="Gender" id="female" value="female" disabled>
+          <label class="form-check-label" for="female">Female</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" Name="Gender" id="other" value="other" disabled>
+          <label class="form-check-label" for="other">Other</label>
+        </div>
+        <span id="GenderError" class="error" style="display: none;"></span>
+      </div>
+      <div class="form-group">
+        <label for="Payment">Payment Method:</label>
+        <select class="form-control" id="Payment" Name="Payment" required disabled>
+          <option value="">Select Payment Method</option>
+          <option value="credit_card">Credit Card</option>
+          <option value="debit_card">Debit Card</option>
+          <option value="gpay">GPay</option>
+          <option value="cash">Cash</option>
+        </select>
+        <span id="PaymentError" class="error" style="display: none;"></span>
+      </div>
+      <div id="cardNumberField" style="display: none;">
+        <div class="form-group">
+          <label for="cardNumber">Card Number:</label>
+          <input type="text" class="form-control" id="cardNumber" Name="cardNumber" placeholder="Enter Card number">
+          <span id="cardNumberError" class="error" style="display: none;"></span>
+        </div>
+      </div>
+
+      <div id="qrCodeField" style="display: none;">
+        <img src="qr.jpg" alt="QR Code" height="150" width="150">
+      </div>
+      <br>
+
+      <button type="submit" class="btn btn-primary" id="submitBtn">Register</button>
+      <div id="userDataContainer" class="mt-3"></div>
+      <div id="registrationSuccessMessage" class="alert alert-success mt-3" style="display: none;">
+        Registration successful! Thank you for registering.
+      </div>
+    </form>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@latest"></script>
+  <script>
+    document.getElementById('Payment').addEventListener('change', function() {
+      var PaymentMethod = this.value;
+      var cardNumberField = document.getElementById('cardNumberField');
+      var qrCodeField = document.getElementById('qrCodeField');
+      cardNumberField.style.display = 'none';
+      qrCodeField.style.display = 'none';
+
+      if (PaymentMethod === 'credit_card' || PaymentMethod === 'debit_card') {
+        cardNumberField.style.display = 'block';
+      }
+
+      if (PaymentMethod === 'gpay') {
+        qrCodeField.style.display = 'block';
+      }
+    });
+
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+    });
+    function enableNextField(currentField, nextField) {
+      currentField.addEventListener('input', function() {
+        if (currentField.value.trim() !== '') {
+          nextField.removeAttribute('disabled');
+        } else {
+          nextField.disabled = true;
+        }
+      });
+    }
+
+    function displayUserData() {
+      var userDataContainer = document.getElementById('userDataContainer');
+      var formData = new FormData(document.getElementById('registrationForm'));
+      var userDataHTML = '<h3>User Information:</h3><ul>';
+
+      for (var pair of formData.entries()) {
+        userDataHTML += '<li><strong>' + pair[0] + ':</strong> ' + pair[1] + '</li>';
+      }
+
+      userDataHTML += '</ul>';
+      userDataContainer.innerHTML = userDataHTML;
+    }
+
+    function displayQRCode() {
+      var PaymentMethod = document.getElementById('Payment').value;
+      var qrImage = document.getElementById('qrcode'); 
+
+      if (PaymentMethod === 'gpay') {
+        qrImage.style.display = 'block'; 
+      } else {
+        qrImage.style.display = 'none'; 
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var NameField = document.getElementById('Name');
+      var EmailField = document.getElementById('Email');
+      var PhoneField = document.getElementById('Phone');
+      var CollegeField = document.getElementById('College');
+      var YearField = document.getElementById('Year');
+      var GenderFields = document.querySelectorAll('input[Name="Gender"]');
+      var PaymentField = document.getElementById('Payment');
+
+      enableNextField(NameField, EmailField);
+      enableNextField(EmailField, PhoneField);
+      enableNextField(PhoneField, CollegeField);
+      enableNextField(CollegeField, YearField);
+      enableNextField(YearField, GenderFields[0]);
+      
+      GenderFields.forEach(function(field, index) {
+        field.addEventListener('change', function() {
+          if (index === 0 && field.checked) {
+            document.getElementById('female').disabled = false;
+            document.getElementById('other').disabled = false;
+          }
+        });
+      });
+
+      enableNextField(GenderFields[0], PaymentField);
+      enableNextField(GenderFields[1], PaymentField);
+      enableNextField(GenderFields[2], PaymentField);
+      enableNextField(PaymentField, document.getElementById('submitBtn'));
+    });
+
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      displayUserData();
+      displayQRCode();
+      document.getElementById('registrationSuccessMessage').style.display = 'block';
+    });
+    function displayUserData() {
+  var formData = new FormData(document.getElementById('registrationForm'));
+
+  for (var pair of formData.entries()) {
+    sessionStorage.setItem(pair[0], pair[1]);
+  }
+
+  window.location.href = 'registration-success.html';
+}
+
+  </script>
+</body>
+</html>

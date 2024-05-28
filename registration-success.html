@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Success</title>
+</head>
+<style>
+body {
+    background-image:url("https://static.vecteezy.com/system/resources/thumbnails/009/826/321/small/pastel-multi-color-gradient-background-simple-form-and-blend-of-color-spaces-as-contemporary-background-graphic-free-vector.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding:250px;
+}
+</style>
+<body>
+  <h1>Registration Successful</h1>
+  <h2>User Information:</h2>
+  <ul>
+    <li><strong>Name:</strong> <span id="Name"></span></li>
+    <li><strong>Email:</strong> <span id="Email"></span></li>
+    <li><strong>Phone:</strong> <span id="Phone"></span></li>
+    <li><strong>College:</strong> <span id="College"></span></li>
+    <li><strong>Year of Study:</strong> <span id="Year"></span></li>
+    <li><strong>Gender:</strong> <span id="Gender"></span></li>
+    <li><strong>Payment Method:</strong> <span id="Payment"></span></li>
+    <li><strong>Card Number:</strong> <span id="CardNumber"></span></li>
+  </ul>
+
+  <script>
+    document.getElementById('Name').textContent = sessionStorage.getItem('Name');
+    document.getElementById('Email').textContent = sessionStorage.getItem('Email');
+    document.getElementById('Phone').textContent = sessionStorage.getItem('Phone');
+    document.getElementById('College').textContent = sessionStorage.getItem('College');
+    document.getElementById('Year').textContent = sessionStorage.getItem('Year');
+    document.getElementById('Gender').textContent = sessionStorage.getItem('Gender');
+    document.getElementById('Payment').textContent = sessionStorage.getItem('Payment');
+    document.getElementById('CardNumber').textContent = sessionStorage.getItem('cardNumber');
+  </script>
+</body>
+</html>
